@@ -1,0 +1,25 @@
+{
+  "name": "javascript-helpers",
+  "version": "1.0.0",
+  "description": "javascript-helpers",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaum97/javascript-helpers.git"
+  },
+  "author": "Jaum97",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jaum97/javascript-helpers/issues"
+  },
+  "homepage": "https://github.com/Jaum97/javascript-helpers#readme",
+  "dependencies": {
+    "react-native-rss-parser": "^1.4.0",
+    "realm": "^3.6.5",
+    "rn-fetch-blob": "^0.12.0",
+    "ts-toolbelt": "^6.3.5"
+  }
+}
