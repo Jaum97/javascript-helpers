@@ -1,4 +1,4 @@
-import { HttpCodes } from '@constants/http'
+import { HttpCodes } from './http'
 
 export const HandleError = (err): void => {
 	if (!err || !err.response || !err.response.status) {
@@ -25,4 +25,12 @@ export const HandleError = (err): void => {
 	}
 
 	throw ''
+}
+
+
+export const throwApiException = (message = 'Algo deu errado') => {
+	throw {
+		code: HttpCodes.APPLICATION_EXCEPTION,
+		message
+	}
 }

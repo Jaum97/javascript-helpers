@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Jaum97/javascript-helpers#readme",
   "dependencies": {
+    "mongoose": "^5.9.3",
     "react-native-rss-parser": "^1.4.0",
     "realm": "^3.6.5",
     "rn-fetch-blob": "^0.12.0",
