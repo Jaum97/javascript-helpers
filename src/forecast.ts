@@ -1,9 +1,9 @@
-import moment from 'moment'
+import { isSameDay, parseISO } from 'date-fns'
 
-import { IForecastListItem, IFormattedForecast } from '@interfaces/forecast'
+import { IForecastListItem, IFormattedForecast } from './interfaces/forecast'
 
 export function isTodayItem(item: IForecastListItem) {
-	return moment().isSame(item.dt_txt, 'day')
+	return isSameDay(Date.now(), parseISO(item.dt_txt))
 }
 
 export function formatForecastListItem(item: IForecastListItem): IFormattedForecast {
