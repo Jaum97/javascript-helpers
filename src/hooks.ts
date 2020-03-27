@@ -47,3 +47,19 @@ export const useDelay = (
 
 	return [start]
 }
+
+//https://itnext.io/how-to-create-react-custom-hooks-for-data-fetching-with-useeffect-74c5dc47000a
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (mounted) setData(data);
+    })();
+    const cleanup = () => { mounted = false; };
+    return cleanup;
+  }, [url]);
+  return data;
+};
