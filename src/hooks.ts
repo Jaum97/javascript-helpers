@@ -63,3 +63,9 @@ const useFetch = (url) => {
   }, [url]);
   return data;
 };
+
+const useTypedSelector<K extends keyof IStore>(props: Array<K>, equalityFn) {
+	const getProps = pickKeys(props)
+	
+	return useSelector<IStore, Pick<IStore, K>>(getProps, equalityFn)
+}
