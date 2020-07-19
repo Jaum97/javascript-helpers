@@ -1,16 +1,17 @@
-import { pipe } from './operators'
 import {
-	startOfWeek,
-	getDay,
 	getDate,
+	getDay,
 	getMonth,
-	subMonths,
-	isSameDay,
 	isAfter,
-	parseISO
+	isSameDay,
+	parseISO,
+	startOfWeek,
+	subMonths
 } from 'date-fns'
-import { setHours, addDays, format } from 'date-fns/fp'
-import { Maybe } from '@shared/interfaces/common'
+import { addDays, format, setHours } from 'date-fns/fp'
+
+import { Maybe } from './interfaces/generic'
+import { pipe } from './operators'
 
 export const getWeekDays = (date: Date): Array<Date> => {
 	const start = pipe(startOfWeek, setHours(12))(date)

@@ -1,7 +1,7 @@
 export function doesPathExist(nodes, path) {
 	if (!nodes || !nodes.length) return false
 
-	const node = nodes.find(node => node.name.value === path[0])
+	const node = nodes.find((node) => node.name.value === path[0])
 
 	if (!node) return false
 

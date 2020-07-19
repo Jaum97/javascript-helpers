@@ -1,6 +1,7 @@
 import { parseISO } from 'date-fns'
-import { pipe, curry } from './operators'
 import { format } from 'date-fns/fp'
+
+import { curry, pipe } from './operators'
 
 export const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm:ss'
 
@@ -19,7 +20,7 @@ export const formatMalformedDate = (separator: string, str: string): string => {
 
 	const strArr = isInverted ? parts.reverse() : parts
 
-	return `${strArr.join('-')}${ hours ? ` ${hours}` : ''}`
+	return `${strArr.join('-')}${hours ? ` ${hours}` : ''}`
 }
 
 const formatSlashDate = curry(formatMalformedDate)('/')
@@ -27,7 +28,7 @@ const formatSlashDate = curry(formatMalformedDate)('/')
 const formatDashDate = curry(formatMalformedDate)('-')
 
 export const set = (date: any): Date => {
-	if(!date) return new Date()
+	if (!date) return new Date()
 
 	if (Number(date) || date instanceof Date) {
 		return formatToISO(date)
@@ -42,7 +43,9 @@ export const set = (date: any): Date => {
 
 		const hasHours = formatted.split(' ').length > 1
 
-		const toFormat = hasHours ? new Date(formatted) : new Date(formatted + ' 12:00:00')
+		const toFormat = hasHours
+			? new Date(formatted)
+			: new Date(formatted + ' 12:00:00')
 
 		return formatToISO(toFormat)
 	}

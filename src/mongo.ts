@@ -1,11 +1,11 @@
 import { DocumentQuery, Model, Schema } from 'mongoose'
 
+import { throwApiException } from './error'
 import {
 	ValidMongoCollection,
 	ValidMongoDocument,
 	ValidMongoId
 } from './interfaces/mongo'
-import { throwApiException } from './error'
 
 export const createRefObject = (
 	collection: ValidMongoCollection,
@@ -19,7 +19,7 @@ export const createRefObject = (
 export function getMongoDocumentById<T extends ValidMongoDocument>(
 	collection: Model<T, {}>
 ): (_id: ValidMongoId) => DocumentQuery<T, T, {}> {
-	return function(_id: ValidMongoId): DocumentQuery<T, T, {}> {
+	return function (_id: ValidMongoId): DocumentQuery<T, T, {}> {
 		if (!_id) {
 			throwApiException('O id é obrigatório')
 		}
@@ -31,7 +31,7 @@ export function getMongoDocumentById<T extends ValidMongoDocument>(
 export function getMongoDocuments<T extends ValidMongoDocument>(
 	collection: Model<T, {}>
 ): (select?: Object) => DocumentQuery<Array<T>, T, {}> {
-	return function(select = {}): DocumentQuery<Array<T>, T, {}> {
+	return function (select = {}): DocumentQuery<Array<T>, T, {}> {
 		return collection.find(select).lean()
 	}
 }
@@ -40,7 +40,7 @@ export function updateMongoDocumentById<
 	T extends ValidMongoDocument,
 	P extends Partial<T>
 >(collection: Model<T, {}>): (_id: ValidMongoId, payload: P) => Promise<T> {
-	return async function(_id, payload) {
+	return async function (_id, payload) {
 		if (!_id) {
 			throwApiException('O id é obrigatório')
 		}
@@ -58,7 +58,7 @@ export function updateMongoDocumentById<
 export function deleteMongoDocumentById<T extends ValidMongoDocument>(
 	collection: Model<T, {}>
 ): (_id: ValidMongoId) => Promise<T> {
-	return async function(_id) {
+	return async function (_id) {
 		if (!_id) {
 			throwApiException('O id é obrigatório')
 		}

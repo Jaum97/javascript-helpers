@@ -23,14 +23,14 @@ export interface IForecastListItem {
 	readonly dt: number
 	readonly dt_txt: string
 	readonly main: {
-		readonly feels_like: number, 
-		readonly grnd_level: number, 
-		readonly humidity: number,
-		readonly pressure: number, 
-		readonly sea_level: number, 
-		readonly temp: number, 
-		readonly temp_kf: number,
-		readonly temp_max: number, 
+		readonly feels_like: number
+		readonly grnd_level: number
+		readonly humidity: number
+		readonly pressure: number
+		readonly sea_level: number
+		readonly temp: number
+		readonly temp_kf: number
+		readonly temp_max: number
 		readonly temp_min: number
 	}
 	readonly sys: {
@@ -54,7 +54,7 @@ export interface IFormattedForecast {
 	readonly feels_like: string
 	readonly temp_min: string
 	readonly temp_max: string
-	
+
 	readonly weather: {
 		readonly main: string
 		readonly description: string

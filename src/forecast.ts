@@ -6,7 +6,9 @@ export function isTodayItem(item: IForecastListItem) {
 	return isSameDay(Date.now(), parseISO(item.dt_txt))
 }
 
-export function formatForecastListItem(item: IForecastListItem): IFormattedForecast {
+export function formatForecastListItem(
+	item: IForecastListItem
+): IFormattedForecast {
 	const { dt_txt, main, weather } = item
 
 	const created = {
@@ -23,7 +25,6 @@ export function formatForecastListItem(item: IForecastListItem): IFormattedForec
 	}
 
 	return created
-
 }
 
 export function isLatestForecast(forecast: IFormattedForecast): boolean {
