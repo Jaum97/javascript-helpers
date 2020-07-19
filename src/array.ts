@@ -1,3 +1,5 @@
+import { F } from 'ts-toolbelt'
+
 /**
  * -removeIndex returns a new array without the element in the index position
  * @param arr any array
@@ -43,7 +45,7 @@ export function arrayReplace<T>(
 export function arrayToChunks<E>(size: number, arr: Array<E>): Array<Array<E>> {
 	const base = Array(Math.ceil(arr.length / size)).fill(null)
 
-	const chunks = base.map((_, i) => arr.slice(i * size,(i + 1) * size))
+	const chunks = base.map((_, i) => arr.slice(i * size, (i + 1) * size))
 
 	return chunks
 }
@@ -64,12 +66,22 @@ export const filterIntoArrays = <T>(
 	for (let i = 0; i < len; i++) {
 		const item = arr[i]
 
-		if (callback(item)) {
-			result[0].push(item)
-		} else {
-			result[1].push(item)
-		}
+		result[callback(item) ? 0 : 1].push(item)
 	}
 
 	return result
 }
+
+export const pipeableArrayMethod = <R = undefined>(method: any) => <
+	C extends F.Function
+>(
+	callback: C
+) => <T>(arr: Array<T> = []): R extends undefined ? Array<T> : R => {
+	return method.call(arr, callback)
+}
+
+export const pipeableMap = pipeableArrayMethod(Array.prototype.map)
+
+export const pipeableFilter = pipeableArrayMethod(Array.prototype.filter)
+
+export const pipeableSome = pipeableArrayMethod<boolean>(Array.prototype.some)

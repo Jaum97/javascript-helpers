@@ -17,7 +17,7 @@ export function curry<T extends F.Function>(func: T): F.Curry<T> {
 		if (args.length >= func.length) {
 			return func.apply(this, args)
 		} else {
-			return function(...args2) {
+			return function (...args2) {
 				return curried.apply(this, args.concat(args2))
 			}
 		}
@@ -40,10 +40,10 @@ export function curry<T extends F.Function>(func: T): F.Curry<T> {
 
 	const res2 = pipe(double, add2)(2) // 6
  */
-export const pipe = function<Fns extends Array<F.Function>>(
+export const pipe = function <Fns extends Array<F.Function>>(
 	...fns: Fns
 ): F.Piped<Fns> {
-	return function(value) {
+	return function (value) {
 		return fns.reduce(
 			(currentVal, currentFn) => currentFn(currentVal),
 			value

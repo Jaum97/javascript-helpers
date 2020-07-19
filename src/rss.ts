@@ -7,11 +7,10 @@ export function getImageURLFromFeedItem(string: string): Maybe<string> {
 
 	const img = myRegex.exec(string)
 
-	if(!img) return
+	if (!img) return
 
-	
 	const url = img[0].replace('<img src="', '').replace('" />', '')
-	
+
 	return url
 }
 
@@ -39,13 +38,12 @@ export function feedItemToAd(label: string, imageUrl: string) {
 
 export function formatRSSFeedItem(feedItem: FeedItem) {
 	const { description, title } = feedItem
-	
+
 	if (!description.includes('<img src')) return
 
 	const extractedUrl = getImageURLFromFeedItem(description)
 
-	if(!extractedUrl) return
+	if (!extractedUrl) return
 
 	return feedItemToAd(title, extractedUrl)
-	
 }

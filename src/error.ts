@@ -1,32 +1,30 @@
 import { HttpCodes } from './http'
 
 export const HandleError = (err): void => {
-	if (!err || !err.response || !err.response.status) {
+	const { status } = err?.response || {}
+
+	if (!status) {
 		// SnackBarHandler.error('Erro de conexão...')
 		throw ''
 	}
 
-	if (err.response.status === HttpCodes.APPLICATION_EXCEPTION) {
-		// SnackBarHandler.error(err.response.data.error.message)
-		throw ''
+	switch (status) {
+		case HttpCodes.APPLICATION_EXCEPTION:
+			// SnackBarHandler.error(err.response.data.error.message)
+			throw ''
+		case HttpCodes.NOT_FOUND:
+			// SnackBarHandler.error(err.response.data.error.message)
+			throw ''
+		case HttpCodes.BAD_REQUEST:
+			// SnackBarHandler.error(err.response.data.error.message)
+			throw ''
+		case HttpCodes.APPLICATION_EXCEPTION:
+			// SnackBarHandler.error(err.response.data.error.message)
+			throw ''
+		default:
+			throw ''
 	}
-
-	if (err.response.status === HttpCodes.NOT_FOUND) {
-		// SnackBarHandler.error('Servidor indisponível...!')
-		throw ''
-	}
-	if (err.response.status === HttpCodes.INTERNAL_SERVER_ERROR) {
-		// SnackBarHandler.error('Servidor indisponível...')
-
-		throw ''
-	}
-	if (err.response.status === HttpCodes.BAD_REQUEST) {
-		throw err.response.data.content
-	}
-
-	throw ''
 }
-
 
 export const throwApiException = (message = 'Algo deu errado') => {
 	throw {
@@ -34,3 +32,19 @@ export const throwApiException = (message = 'Algo deu errado') => {
 		message
 	}
 }
+
+export const createGuard = <H extends (error: Error) => any>(handler: H) => <
+	F extends (...params: any[]) => any
+>(
+	callback: F
+) => <P extends Parameters<F>>(
+	...props: P
+): ReturnType<F> | ReturnType<H> | void => {
+	try {
+		return callback(...props)
+	} catch (error) {
+		return handler(error)
+	}
+}
+
+export const guarded = createGuard(console.log)
