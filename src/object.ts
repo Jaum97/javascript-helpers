@@ -1,6 +1,6 @@
 import { A, L, O } from 'ts-toolbelt'
 
-import { satisfiesAll } from './function'
+import { satisfiesAll, complement } from './function'
 import { Maybe, ValidPropType } from './interfaces/generic'
 
 export function pickKeys<O, K extends keyof O>(
@@ -56,34 +56,40 @@ export function getSafe<T extends object, P extends L.List<A.Index>>(
 	return getSafe(val, props.slice(1))
 }
 
+const isObj = (val) => val === new Object(val)
+
+const isNotArray = complement(Array.isArray)
+
+const isValidObj = satisfiesAll(isObj, isNotArray)
+
+const isEmptyObj = (val) => !Object.keys(val).length
+
+const isNotEmptyObj = complement(isEmptyObj)
+
+const isValidObjAndNotEmpty = satisfiesAll(isValidObj, isNotEmptyObj)
+
+const mapValsReducer = (vals) => (col, key, i) => ({ ...col, [key]: vals[i] })
+
+const resolveVal = (v) => (isValidObjAndNotEmpty(v) ? getObjPromise(v) : v)
+
 /**
  * resolveObject
  * @param obj object with props that are promises
  * @returns promise that resolves into object with all props resolved
  */
-export const resolveObject = async function <T>(obj: T): Promise<T> {
-	const values = await Promise.all(Object.values(obj))
+export const getObjPromise = async <T>(obj: T): Promise<T> => {
+	const values = Object.values(obj)
 
-	const res = Object.keys(obj).reduce(
-		(obj, key, i) => Object.assign(obj, { [key]: values[i] }),
-		{}
-	)
+	const valuePromises = values.map(resolveVal)
 
-	return res as T
+	const resolvedValues = await Promise.all(valuePromises)
+
+	const objKeys = Object.keys(obj)
+
+	const newObj = objKeys.reduce(mapValsReducer(resolvedValues), {})
+
+	return newObj
 }
-
-export const isValidObj = (obj: any): boolean =>
-	obj === Object(obj) && !Array.isArray(obj)
-
-export const objHasProps = (obj: any): boolean =>
-	Boolean(obj && Object.keys(obj).length)
-
-/**
- * - isObjValidAndNotEmpty checks if object is valid and not empty
- * @param x object to verify
- * @returns boolean
- */
-export const isObjValidAndNotEmpty = satisfiesAll(isValidObj, objHasProps)
 
 /**
  * isEmptyOrFalsy checks whether array or object are empty
@@ -94,7 +100,7 @@ export const isObjValidAndNotEmpty = satisfiesAll(isValidObj, objHasProps)
 export const isEmptyOrFalsy = (elem: any): boolean => {
 	if (Array.isArray(elem)) return Boolean(elem.length)
 
-	if (isValidObj(elem)) return objHasProps(elem)
+	if (isValidObj(elem)) return isNotEmptyObj(elem)
 
 	return Boolean(elem)
 }
@@ -118,8 +124,8 @@ const compareProp = function (
 	return (prop) => (item1) => (item2) => {
 		if (!item1 || !item2) return false
 
-		const toCompare1 = isObjValidAndNotEmpty(item1) ? item1[prop] : item1
-		const toCompare2 = isObjValidAndNotEmpty(item2) ? item2[prop] : item2
+		const toCompare1 = isValidObjAndNotEmpty(item1) ? item1[prop] : item1
+		const toCompare2 = isValidObjAndNotEmpty(item2) ? item2[prop] : item2
 
 		const matches = checkEqual
 			? toCompare1 === toCompare2

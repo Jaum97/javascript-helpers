@@ -16,8 +16,9 @@ export function downloadMediaAsync(
 	let PictureDir = fs.dirs.DocumentDir
 	const date = new Date()
 
-	const mediaKey =
-		String(Math.floor(date.getSeconds() / 2)) + generateSerial(6)
+	const mediaKeyTimestamp = Math.floor(date.getSeconds() / 2)
+
+	const mediaKey = String(mediaKeyTimestamp) + generateSerial(6)
 
 	const options = { path: PictureDir + '/pic' + mediaKey }
 
