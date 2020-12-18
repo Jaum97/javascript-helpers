@@ -59,17 +59,13 @@ export const filterIntoArrays = <T>(
 	callback: (param: T) => boolean,
 	arr: Array<T>
 ): [Array<T>, Array<T>] => {
-	const result = [[], []] as [Array<T>, Array<T>]
+	const [arr1, arr2] = [[], []]
+    
+    for(const item of arr) {
+        (callback(item) ? arr1 : arr2).push(item) 
+    }
 
-	const len = arr.length
-
-	for (let i = 0; i < len; i++) {
-		const item = arr[i]
-
-		result[callback(item) ? 0 : 1].push(item)
-	}
-
-	return result
+	return [arr1, arr2]
 }
 
 export const pipeableArrayMethod = <R = undefined>(method: any) => <
