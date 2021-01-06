@@ -50,3 +50,7 @@ export const pipe = function <Fns extends Array<F.Function>>(
 		)
 	}
 }
+
+export const flip = <F extends (...args: any[]) => any>(fn: F) => <A extends Parameters<F>>(...args: A): ReturnType<F> => fn(args[1], args[0], ...args.slice(2))
+
+export const pass = <T>(x: T): T => x
