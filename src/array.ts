@@ -81,3 +81,19 @@ export const pipeableMap = pipeableArrayMethod(Array.prototype.map)
 export const pipeableFilter = pipeableArrayMethod(Array.prototype.filter)
 
 export const pipeableSome = pipeableArrayMethod<boolean>(Array.prototype.some)
+	
+export const asyncFilter = <P extends (...args: any[]) => Promise<boolean>>(fn: P) => async <T>(arr: T[]): Promise<T[]> => {
+    const flags = await Promise.all(arr.map(fn))
+
+    const hasFlag = (_, i) => Boolean(flags[i])
+
+    return arr.filter(hasFlag)
+}
+
+const fn = (num: number) => Promise.resolve(num % 2 === 0)
+
+const arr = Array(10).fill(0).map((_, i) => i + 1)
+
+const arr2 = asyncFilter(fn)(arr)
+
+arr2  // then [ 2, 4, 6, 8, 10 ] 
